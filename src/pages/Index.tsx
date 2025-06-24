@@ -1,19 +1,78 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Zap, Eye, Bone } from "lucide-react";
 import { useState } from "react";
+import Navigation from "@/components/Navigation";
+import ProductImageSlideshow from "@/components/ProductImageSlideshow";
+import ShoppingCart from "@/components/ShoppingCart";
+
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  pack: string;
+}
 
 const Index = () => {
   const [selectedPack, setSelectedPack] = useState("30-day");
   const [quantity, setQuantity] = useState(1);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const packs = {
     "15-day": { price: 1080, savings: 0 },
     "30-day": { price: 2050, savings: 110 },
     "60-day": { price: 3900, savings: 500 }
   };
+
+  const addToCart = () => {
+    const newItem: CartItem = {
+      id: `${selectedPack}-${Date.now()}`,
+      name: "MySup 360 – Daily Superfood Blend",
+      price: packs[selectedPack].price,
+      quantity: quantity,
+      pack: `${selectedPack} Pack`
+    };
+
+    setCartItems(prev => {
+      const existingItem = prev.find(item => item.pack === newItem.pack);
+      if (existingItem) {
+        return prev.map(item => 
+          item.pack === newItem.pack 
+            ? { ...item, quantity: item.quantity + newItem.quantity }
+            : item
+        );
+      }
+      return [...prev, newItem];
+    });
+    
+    setIsCartOpen(true);
+  };
+
+  const updateCartQuantity = (id: string, newQuantity: number) => {
+    if (newQuantity === 0) {
+      removeFromCart(id);
+      return;
+    }
+    setCartItems(prev => 
+      prev.map(item => 
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  const removeFromCart = (id: string) => {
+    setCartItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleCheckout = () => {
+    alert("Proceeding to checkout...");
+    // Implement checkout logic here
+  };
+
+  const totalCartItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const benefits = [
     { icon: <Heart className="w-8 h-8" />, label: "Gut Health" },
@@ -76,6 +135,20 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Navigation 
+        cartItems={totalCartItems}
+        onCartClick={() => setIsCartOpen(true)}
+      />
+      
+      <ShoppingCart
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        items={cartItems}
+        onUpdateQuantity={updateCartQuantity}
+        onRemoveItem={removeFromCart}
+        onCheckout={handleCheckout}
+      />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-emerald-50 to-white py-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -134,7 +207,21 @@ const Index = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white px-8">
+                <Button 
+                  size="lg" 
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-8"
+                  onClick={addToCart}
+                >
+                  Add to Cart
+                </Button>
+                <Button 
+                  size="lg" 
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-8"
+                  onClick={() => {
+                    addToCart();
+                    handleCheckout();
+                  }}
+                >
                   Buy Now
                 </Button>
                 <Button size="lg" variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-50">
@@ -144,18 +231,14 @@ const Index = () => {
             </div>
 
             <div className="text-center">
-              <img 
-                src="/lovable-uploads/3d54c6c0-4097-41e4-8186-4188e36a66b8.png" 
-                alt="MySup 360 Product" 
-                className="max-w-md mx-auto"
-              />
+              <ProductImageSlideshow />
             </div>
           </div>
         </div>
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section id="benefits" className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-12">One Sachet, Numerous Benefits</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
@@ -212,7 +295,7 @@ const Index = () => {
       </section>
 
       {/* Ingredients Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section id="ingredients" className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">What's Inside</h2>
@@ -388,7 +471,7 @@ const Index = () => {
       </section>
 
       {/* Reviews Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section id="reviews" className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Customer Reviews</h2>
@@ -426,7 +509,7 @@ const Index = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4">
+      <section id="faq" className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Frequently Asked Questions</h2>
           <div className="space-y-6">
@@ -448,8 +531,12 @@ const Index = () => {
             Join thousands of customers who have transformed their health with MySup 360
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-emerald-600 hover:bg-gray-100">
-              Order Now
+            <Button 
+              size="lg" 
+              className="bg-white text-emerald-600 hover:bg-gray-100"
+              onClick={addToCart}
+            >
+              Add to Cart
             </Button>
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-emerald-600">
               Subscribe & Save
