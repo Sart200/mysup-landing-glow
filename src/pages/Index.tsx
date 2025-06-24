@@ -51,6 +51,11 @@ const Index = () => {
     setIsCartOpen(true);
   };
 
+  const handleBuyNow = () => {
+    addToCart();
+    handleCheckout();
+  };
+
   const updateCartQuantity = (id: string, newQuantity: number) => {
     if (newQuantity === 0) {
       removeFromCart(id);
@@ -138,6 +143,8 @@ const Index = () => {
       <Navigation 
         cartItems={totalCartItems}
         onCartClick={() => setIsCartOpen(true)}
+        onAddToCart={addToCart}
+        onBuyNow={handleBuyNow}
       />
       
       <ShoppingCart
@@ -184,7 +191,7 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Quantity & CTA */}
+              {/* Quantity & Total */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center border rounded-lg">
                   <button 
@@ -207,23 +214,6 @@ const Index = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-8"
-                  onClick={addToCart}
-                >
-                  Add to Cart
-                </Button>
-                <Button 
-                  size="lg" 
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-8"
-                  onClick={() => {
-                    addToCart();
-                    handleCheckout();
-                  }}
-                >
-                  Buy Now
-                </Button>
                 <Button size="lg" variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-50">
                   Subscribe & Save 10%
                 </Button>
@@ -523,24 +513,30 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer CTA */}
+      {/* Email Subscription Footer */}
       <section className="py-16 px-4 bg-emerald-600 text-white text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">Start Your Wellness Journey Today</h2>
+          <h2 className="text-3xl font-bold mb-4">Stay Updated with MySup</h2>
           <p className="text-xl mb-8 opacity-90">
-            Join thousands of customers who have transformed their health with MySup 360
+            Subscribe to get health tips, exclusive offers, and the latest updates from MySup
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              className="bg-white text-emerald-600 hover:bg-gray-100"
-              onClick={addToCart}
-            >
-              Add to Cart
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-emerald-600">
-              Subscribe & Save
-            </Button>
+          <div className="max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white"
+              />
+              <Button 
+                size="lg" 
+                className="bg-white text-emerald-600 hover:bg-gray-100 px-8"
+              >
+                Subscribe
+              </Button>
+            </div>
+            <p className="text-sm mt-3 opacity-80">
+              Join thousands of health enthusiasts. Unsubscribe anytime.
+            </p>
           </div>
         </div>
       </section>

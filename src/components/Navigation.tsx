@@ -7,9 +7,11 @@ import { ShoppingCart, Menu, X } from "lucide-react";
 interface NavigationProps {
   cartItems: number;
   onCartClick: () => void;
+  onAddToCart: () => void;
+  onBuyNow: () => void;
 }
 
-const Navigation = ({ cartItems, onCartClick }: NavigationProps) => {
+const Navigation = ({ cartItems, onCartClick, onAddToCart, onBuyNow }: NavigationProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -29,8 +31,26 @@ const Navigation = ({ cartItems, onCartClick }: NavigationProps) => {
             <a href="#faq" className="text-gray-600 hover:text-emerald-600 transition-colors">FAQ</a>
           </div>
 
-          {/* Cart and Mobile Menu */}
-          <div className="flex items-center space-x-4">
+          {/* Action Buttons and Cart */}
+          <div className="flex items-center space-x-3">
+            {/* Action Buttons - Hidden on mobile */}
+            <div className="hidden lg:flex items-center space-x-2">
+              <Button 
+                size="sm" 
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                onClick={onAddToCart}
+              >
+                Add to Cart
+              </Button>
+              <Button 
+                size="sm" 
+                className="bg-orange-600 hover:bg-orange-700 text-white"
+                onClick={onBuyNow}
+              >
+                Buy Now
+              </Button>
+            </div>
+
             <Button
               variant="outline"
               size="sm"
@@ -65,6 +85,24 @@ const Navigation = ({ cartItems, onCartClick }: NavigationProps) => {
             <a href="#ingredients" className="block px-4 py-2 text-gray-600 hover:text-emerald-600 transition-colors">Ingredients</a>
             <a href="#reviews" className="block px-4 py-2 text-gray-600 hover:text-emerald-600 transition-colors">Reviews</a>
             <a href="#faq" className="block px-4 py-2 text-gray-600 hover:text-emerald-600 transition-colors">FAQ</a>
+            
+            {/* Mobile Action Buttons */}
+            <div className="flex flex-col space-y-2 px-4 pt-2">
+              <Button 
+                size="sm" 
+                className="bg-emerald-600 hover:bg-emerald-700 text-white w-full"
+                onClick={onAddToCart}
+              >
+                Add to Cart
+              </Button>
+              <Button 
+                size="sm" 
+                className="bg-orange-600 hover:bg-orange-700 text-white w-full"
+                onClick={onBuyNow}
+              >
+                Buy Now
+              </Button>
+            </div>
           </div>
         )}
       </div>
