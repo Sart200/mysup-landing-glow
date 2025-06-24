@@ -7,11 +7,10 @@ const ProductImageSlideshow = () => {
   const [mainImage, setMainImage] = useState(0);
   
   const productImages = [
-    "/lovable-uploads/3d54c6c0-4097-41e4-8186-4188e36a66b8.png",
-    "/lovable-uploads/f22ca76f-b5fb-4958-aa42-a657662d1519.png",
-    "/lovable-uploads/a82e52cd-34ac-41dd-99aa-a12bd2b65f77.png",
-    "/lovable-uploads/e615aa42-04e9-4cd3-9799-ea508a9fed1a.png",
-    "/lovable-uploads/0dc3f3b5-d7b7-4084-936f-2d7163611853.png"
+    "/lovable-uploads/4f512515-868a-407d-80c4-422567876ca5.png",
+    "/lovable-uploads/28cefd04-aef6-47dc-9a75-383aba815839.png",
+    "/lovable-uploads/a39f59e5-c5dc-4f7a-b585-89881675a27f.png",
+    "/lovable-uploads/50c61fa7-58c7-4d26-a28a-0f3fb5db2d0f.png"
   ];
 
   const nextImage = () => {
@@ -23,20 +22,20 @@ const ProductImageSlideshow = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full max-w-lg mx-auto">
       {/* Main Image */}
-      <div className="relative bg-gray-50 rounded-lg overflow-hidden aspect-square">
+      <div className="relative bg-gray-50 rounded-lg overflow-hidden aspect-square w-full">
         <img 
           src={productImages[mainImage]}
           alt="MySup 360 Product" 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain p-4"
         />
         
         {/* Navigation Arrows */}
         <Button
           variant="outline"
           size="icon"
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white shadow-md"
           onClick={prevImage}
         >
           <ChevronLeft className="w-4 h-4" />
@@ -44,7 +43,7 @@ const ProductImageSlideshow = () => {
         <Button
           variant="outline"
           size="icon"
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white shadow-md"
           onClick={nextImage}
         >
           <ChevronRight className="w-4 h-4" />
@@ -52,19 +51,19 @@ const ProductImageSlideshow = () => {
       </div>
 
       {/* Thumbnail Images */}
-      <div className="grid grid-cols-4 gap-3">
-        {productImages.slice(1, 5).map((image, index) => (
+      <div className="grid grid-cols-4 gap-2 sm:gap-3">
+        {productImages.map((image, index) => (
           <button
             key={index}
-            onClick={() => setMainImage(index + 1)}
+            onClick={() => setMainImage(index)}
             className={`relative bg-gray-50 rounded-lg overflow-hidden aspect-square border-2 transition-all hover:opacity-80 ${
-              mainImage === index + 1 ? 'border-emerald-500' : 'border-transparent'
+              mainImage === index ? 'border-emerald-500' : 'border-transparent'
             }`}
           >
             <img 
               src={image}
-              alt={`Product view ${index + 2}`}
-              className="w-full h-full object-cover"
+              alt={`Product view ${index + 1}`}
+              className="w-full h-full object-contain p-1 sm:p-2"
             />
           </button>
         ))}
